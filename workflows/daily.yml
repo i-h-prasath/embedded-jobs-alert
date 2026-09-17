@@ -1,10 +1,12 @@
 name: Embedded Jobs 3x Daily
 on:
   schedule:
-    - cron: '30 4,9,14 * * *'
+    - cron: '30 4,9,14 * * *'  # 10AM, 3PM, 8PM IST
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -26,4 +28,5 @@ jobs:
           git config user.name "jobs-bot"
           git config user.email "jobs-bot@github.com"
           git add seen.json || true
-          git commit -m "update seen $(date
+          git commit -m "update seen $(date -u)" || echo "no changes"
+          git push || true
