@@ -4,9 +4,15 @@ from email.mime.text import MIMEText
 
 ADZUNA_ID = os.getenv("ADZUNA_APP_ID")
 ADZUNA_KEY = os.getenv("ADZUNA_APP_KEY")
-EMAIL_FROM = os.getenv("beeshari1503@gmail.com")
-EMAIL_PASS = os.getenv("cram ktfd hhuy btnb")
-EMAIL_TO = os.getenv("hariprasathsmb@gmail.com")
+EMAIL_FROM = (os.getenv("EMAIL_FROM") or "").strip()
+EMAIL_PASS = (os.getenv("EMAIL_PASS") or "").replace(" ", "").strip()
+EMAIL_TO = (os.getenv("EMAIL_TO") or "").strip()
+
+print(f"EMAIL_FROM set? {bool(EMAIL_FROM)}")
+print(f"EMAIL_PASS len: {len(EMAIL_PASS) if EMAIL_PASS else 0} should be 16")
+if not EMAIL_FROM or not EMAIL_PASS:
+    raise SystemExit("Missing secrets - check Settings > Secrets and variables > Actions")
+
 
 INCLUDE = ["firmware","embedded","bsp","device driver","microcontroller","stm32","esp32","rtos","yocto","u-boot","linux kernel","iot"]
 EXCLUDE = ["senior","lead","manager","architect","staff","principal"]
