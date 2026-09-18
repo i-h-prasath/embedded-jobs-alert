@@ -1,5 +1,5 @@
 import os, requests, re, smtplib, json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.mime.text import MIMEText
 
 ADZUNA_ID = os.getenv("ADZUNA_APP_ID")
@@ -47,6 +47,18 @@ def stable_key(j):
     t = (j.get("title","") or "").lower().strip()
     c = str(j.get("company",{}).get("display_name","")).lower().strip()
     return f"{t}|{c}"[:200]
+
+def format_posted(created_str):
+    # created like "2026-05-07T12:42:42Z" -> IST
+    if not created_str:
+        return "date not given"
+    try:
+        dt_utc = datetime.fromisoformat(created_str.replace("Z", "+00:00"))
+        dt_ist = dt_utc + timedelta(hours=5, minutes=30)
+        return dt_ist.strftime("%d %b %Y, %I:%M %p IST")
+    except:
+        return created_str[:10]
+
 
 try:
     with open("seen.json","r") as f:
